@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>غيمة وورد</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><h1>غيمة وورد</h1><a href="cart.html">السلة</a></header>
+<main>
+<h2>أجمل باقات الورد</h2>
+<button onclick="addToCart('باقة ورد',150)">أضف للسلة</button>
+</main>
+<script>
+function addToCart(name,price){
+ let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+ cart.push({name,price});
+ localStorage.setItem('cart',JSON.stringify(cart));
+ alert('تمت الإضافة');
+}
+</script>
+</body>
+</html>
