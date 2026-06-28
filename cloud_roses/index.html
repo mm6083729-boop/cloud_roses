@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>غيمة وورد | Cloud & Roses</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 🌟 تنسيق نافذة تكبير الصورة (Lightbox) */
+        .image-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            padding-top: 40px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.9); 
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 85%;
+            max-width: 450px;
+            border-radius: 12px;
+            animation: zoomIn 0.25s ease;
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.7); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #bbb;
+        }
+
+        .product-card img {
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+        
+        .product-card img:hover {
+            transform: scale(1.02);
+        }
+
+        /* 🌟 تنسيق المنتجات المخلصة (نفدت الكمية) */
+        .out-of-stock {
+            position: relative;
+            opacity: 0.6; /* جعل الكرت شبه شفاف */
+            pointer-events: none; /* منع الضغط على أي شيء داخل الكرت */
+        }
+
+        .out-of-stock img {
+            filter: grayscale(40%); /* جعل ألوان الصورة باهتة قليلاً */
+            cursor: not-allowed;
+        }
+
+        /* شارة "نفدت الكمية" فوق الصورة */
+        .out-of-stock-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            z-index: 2;
+            pointer-events: auto; /* للسماح بقرائتها فقط */
+        }
+
+        /* تعديل زر الشراء المخلص */
+        .out-of-stock .sold-out-btn {
+            background-color: #7f8c8d !important;
+            color: #bdc3c7 !important;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo-area">
+            <img src="logo.png" alt="غيمة وورد">
+            <div>
+                <h1>غيمة وورد</h1>
+                <span>Cloud & Roses</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#">الرئيسية</a>
+            <a href="#products">المنتجات</a>
+            <a href="cart.html" id="cart-icon" style="position: relative; text-decoration: none; color: d81b60;">السلة 
+                <span id="cart-count" style="position: absolute; top: -10px; right: -10px; background: #d81b60; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold;">0</span>
+            </a>
+            
+        <a href="#location">موقعنا</a>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <h2>أجمل باقات الورد</h2>
+    <p>ورد طبيعي فاخر لجميع المناسبات</p>
+</section>
+
+
+<!-- كود العداد الذكي (جافاسكريبت) -->
+<script>
+    function animateCounter(id, start, end, duration) {
+        let obj = document.getElementById(id);
+        let range = end - start;
+        let minTime = 50;
+        let stepTime = Math.max(Math.floor(duration / range), minTime);
+        let startTime = new Date().getTime();
+        let endTime = startTime + duration;
+        let timer;
+
+        function run() {
+            let now = new Date().getTime();
+            let remaining = Math.max((endTime - now) / duration, 0);
+            let value = Math.round(end - (remaining * range));
+            obj.innerHTML = value + "+";
+            if (value == end) {
+                clearInterval(timer);
+            }
+        }
+        timer = setInterval(run, stepTime);
+    }
+
+    // تشغيل العدادات عند تحميل الصفحة
+    window.onload = function() {
+        animateCounter("counter1", 0, 500, 2000);
+        animateCounter("counter2", 0, 320, 2000);
+        animateCounter("counter3", 0, 5, 2000);
+    };
+</script>
+
+<section id="products" class="products">
+    <h2>منتجاتنا</h2>
+    <div class="products-grid"> 
+
+        
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1520763185298-1b434c919102?w=800" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة ورد وردية</h3>
+            <p class="description"></p>
+            <p>150 ريال</p>
+            <button onclick="addToCart('باقة ورد وردية',150)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            
+            <img src="https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=800" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة فاخرة</h3>
+            <p class="description"></p>
+            <p>250 ريال</p>
+                   <button onclick="addToCart('باقة فاخر',250)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="671081835_2952766481735213_1632482751628201903_n.jpg" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة مناسبات</h3>
+            <p class="description"></p>
+            <p>180 ريال</p>
+            <button onclick="addToCart('باقة مناسبات',180)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="تشريع سيارات.png" alt="" onclick="zoomImage(this.src)">
+            <h3>تشريع سيارات</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('تشريع سيارات',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة التخرج.png" alt="" onclick="zoomImage(this.src)"> 
+            <h3>باقة التخرج</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة التخرج',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة الحلويات.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة الحلويات</h3>
+            <p class="description"></p>
+            <p>250 ريال</p>
+            <button onclick="addToCart('باقة الحلويات',250)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة الجمال.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة الجمال</h3>
+            <p class="description"></p>
+            <p>300 ريال</p>
+            <button onclick="addToCart('باقة الجمال',300)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            
+            <img src="باقة التخرج2.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة التخرج2</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+                   <button onclick="addToCart('باقة التخرج',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة الفراشة.jpg" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة الفراشة</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة الفراشه',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة الكتكات.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة الكتكات</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة الكتكات',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة الورود.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة الورود</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة الورود',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة زاهيه.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة زاهيه</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة زاهيه',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة صغيره.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة صغيره</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة صغيره',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة كبيرة.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة كبيرة</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة كبيرة',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة كيندر.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة كيندر</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة كيندر',200)">أضف للسلة</button>
+        </div> 
+
+        <div class="product-card">
+            <img src="باقة30ورده.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة30ورده</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة30ورده',200)">أضف للسلة</button>
+        </div>
+         
+        <div class="product-card">
+            <img src="باقة هبي بايرث داي.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة هبي بايرث داي</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة هبي بايرث داي',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقه وسط.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة وسط</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة وسط',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقة20ورد.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقة20ورد</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة20ورد',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="باقه كبيره مع باتشي.png" alt="" onclick="zoomImage(this.src)">
+            <h3>باقه كبيرة مع باتشي</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة كبيرة مع باتشي',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="تنسق ورده.png" alt="" onclick="zoomImage(this.src)">
+            <h3>تنسق ورده</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('باقة تنسق ورده',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="شنطة كيك.png" alt="" onclick="zoomImage(this.src)">
+            <h3>شنطة كيك</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('شنطة كيك',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="فازة ورده.png" alt="" onclick="zoomImage(this.src)">
+            <h3>فازة ورده</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('فازة ورده',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="هدية عنوان القهوة.png" alt="" onclick="zoomImage(this.src)">
+            <h3>هدية عنوان القهوة</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('هدية عنوان القهوة',200)">أضف للسلة</button>
+        </div>
+
+        <div class="product-card">
+            <img src="فازة مولود.png" alt="" onclick="zoomImage(this.src)">
+            <h3>فازة مولود</h3>
+            <p class="description"></p>
+            <p>200 ريال</p>
+            <button onclick="addToCart('فازة مولود',200)">أضف للسلة</button>
+        </div>
+
+    </div>
+</section>
+<!-- قسم آراء العملاء بستايل النخبة الموحد بالدوائر الفخمة -->
+<section id="reviews" style="padding: 100px 20px; background: #ffffff; text-align: center;">
+    <h2 style="font-size: 2.8rem; color: #1a1a1a; margin-bottom: 70px; letter-spacing: -1px;">كلمات من عملائنا 🕊️</h2>
+    
+    <div style="display: flex; gap: 60px; overflow-x: auto; padding: 20px; scrollbar-width: none; justify-content: flex-start;">
+        
+        <!-- رأي 1 -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="width: 100px; height: 100px; background: #fdfdfd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 30px; border: 1px solid #e0e0e0; box-shadow: inset 0 0 10px rgba(0,0,0,0.03);">👩‍💼</div>
+            <p style="font-size: 1.3rem; color: #444; line-height: 1.8; font-weight: 300; margin-bottom: 20px;">"جمال لا يوصف، ودقة في التنسيق تجعل كل مناسبة ذكرى لا تُنسى. شكراً لغيمة وورد."</p>
+            <h4 style="font-size: 1.1rem; color: #b8860b; text-transform: uppercase; letter-spacing: 2px;">سارة محمد</h4>
+        </div>
+
+        <!-- رأي 2 -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="width: 100px; height: 100px; background: #fdfdfd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 30px; border: 1px solid #e0e0e0; box-shadow: inset 0 0 10px rgba(0,0,0,0.03);">👨‍💼</div>
+            <p style="font-size: 1.3rem; color: #444; line-height: 1.8; font-weight: 300; margin-bottom: 20px;">"تعامل راقٍ، واحترافية عالية. التزام بالوقت وجودة الورود كانت فوق التوقعات تماماً."</p>
+            <h4 style="font-size: 1.1rem; color: #b8860b; text-transform: uppercase; letter-spacing: 2px;">خالد العتيبي</h4>
+        </div>
+
+        <!-- رأي 3 -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="width: 100px; height: 100px; background: #fdfdfd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 30px; border: 1px solid #e0e0e0; box-shadow: inset 0 0 10px rgba(0,0,0,0.03);">👩‍💼</div>
+            <p style="font-size: 1.3rem; color: #444; line-height: 1.8; font-weight: 300; margin-bottom: 20px;">"تجربة شرائية فاخرة، من الطلب حتى الوصول. شكراً لكم على هذا الإبداع."</p>
+            <h4 style="font-size: 1.1rem; color: #b8860b; text-transform: uppercase; letter-spacing: 2px;">نورة أحمد</h4>
+        </div>
+
+        <!-- رأي 4 -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="width: 100px; height: 100px; background: #fdfdfd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 30px; border: 1px solid #e0e0e0; box-shadow: inset 0 0 10px rgba(0,0,0,0.03);">👨‍💼</div>
+            <p style="font-size: 1.3rem; color: #444; line-height: 1.8; font-weight: 300; margin-bottom: 20px;">"باقات مميزة جداً، واضحة اللمسة الفنية في كل تفصيلة. متجر يعكس الذوق الرفيع فعلاً."</p>
+            <h4 style="font-size: 1.1rem; color: #b8860b; text-transform: uppercase; letter-spacing: 2px;">فيصل العلي</h4>
+        </div>
+
+        <!-- رأي 5 -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="width: 100px; height: 100px; background: #fdfdfd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 30px; border: 1px solid #e0e0e0; box-shadow: inset 0 0 10px rgba(0,0,0,0.03);">👩‍💼</div>
+            <p style="font-size: 1.3rem; color: #444; line-height: 1.8; font-weight: 300; margin-bottom: 20px;">"توصيل سريع ومغلف بعناية فائقة. غيمة وورد هم وجهتي الأولى لكل مناسبة سعيدة."</p>
+            <h4 style="font-size: 1.1rem; color: #b8860b; text-transform: uppercase; letter-spacing: 2px;">ليلى السالم</h4>
+        </div>
+
+    </div>
+</section>
+
+</section>
+<div id="imageModal" class="image-modal">
+    <span class="close-modal" onclick="closeImage()">×</span>
+    <img class="modal-content" id="modalTargetImg">
+</div>
+
+<section id="location" class="products-section">
+  <h2>📍 موقع المحل </h2>
+  <p style="color:#fff; font-size:18px; font-weight:bold;">
+       المدينة المنورة – شظأ
+  </p>
+  <a href="https://maps.app.goo.gl/bKW6Bk9FFn4KeRBr8" 
+     target="_blank"
+     style="background:#fff; padding:10px 20px; border-radius:8px; display:inline-block; margin-top:10px; color:#b84ed4; font-weight:bold;">
+    فتح الموقع على خرائط Google
+  </a>
+</section>
+
+<section id="social" class="products-section" style="text-align: center; padding: 20px;">
+  <h2>تابعونا</h2>
+  <div style="display:flex; justify-content:center; gap:25px; align-items:center; margin-top:20px;">
+    
+    <a href="https://wa.me/966501223800" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/3670/3670051.png" alt="WhatsApp" 
+           style="width:40px; height:40px; transition: transform 0.3s;">
+    </a>
+
+    <a href="https://www.instagram.com/gifts_almadinh" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" 
+           style="width:40px; height:40px; transition: transform 0.3s;">
+    </a>
+
+    
+         
+  </div>
+</section>
+
+<style>
+  /* إضافة تأثير تكبير خفيف عند مرور الماوس فوق الأيقونات */
+  #social img:hover {
+    transform: scale(1.1);
+  }
+</style>
+
+<script>
+function addToCart(name, price){
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let existing = cart.find(item => item.name === name);
+
+    if(existing){
+        existing.quantity = (existing.quantity || 1) + 1;
+    }else{
+        cart.push({
+            name:name,
+            price:price,
+            quantity:1
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert('تمت إضافة المنتج للسلة');
+}
+
+function zoomImage(src) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalTargetImg");
+    modal.style.display = "block";
+    modalImg.src = src;
+}
+
+function closeImage() {
+    document.getElementById("imageModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("imageModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+<script>
+    // 1. عند تحميل الصفحة، تأكد من استعادة عدد العناصر من السلة وتحديث الرقم
+    window.addEventListener('DOMContentLoaded', () => {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let counter = document.getElementById('cart-count');
+        if (counter) {
+            counter.innerText = cart.length;
+        }
+    });
+
+    // 2. دالة الإضافة للسلة (بدون رسائل تنبيه، فقط تحديث رقمي)
+    function addToCart(name, price) {
+        // حفظ المنتج في السلة
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push({ name: name, price: price });
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // تحديث الرقم فوراً فوق السلة
+        let countElement = document.getElementById('cart-count');
+        if (countElement) {
+            countElement.innerText = cart.length;
+        }
+
+        // تأثير "النبض" الفخم للأيقونة ليعرف العميل أن العملية تمت
+        let icon = document.getElementById('cart-icon');
+        if (icon) {
+            icon.style.transition = "transform 0.3s ease";
+            icon.style.transform = "scale(1.4)";
+            setTimeout(() => { icon.style.transform = "scale(1)"; }, 300);
+        }
+    }
+</script>
+   
+</script>
+</body>
+</html>
