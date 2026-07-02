@@ -475,3 +475,43 @@ style>
     font-size: 13px;
     cursor: pointer;
 }
+
+/* تعديل حجم المستطيل ليصبح أصغر */
+.custom-select {
+    width: 100%;
+    max-width: 250px; /* قللنا العرض من 400px إلى 250px */
+    padding: 8px 15px; /* قللنا الحشوات لتصغير ارتفاعه */
+    font-size: 14px; /* صغرنا حجم الخط ليناسب الحجم الجديد */
+    border-radius: 25px; /* صغرنا نصف قطر الزاوية ليناسب الحجم الأصغر */
+    border: 2px solid #e313ac;
+    background-color: #ffffff;
+    color: #333;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    
+    /* السهم المخصص */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e313ac" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+}
+/* إضافة تأثير عند الضغط أو التمرير */
+.custom-select:hover {
+    border-color: #d1109a;
+    box-shadow: 0 4px 8px rgba(227, 19, 172, 0.2);
+}
+
+.custom-select:focus {
+    box-shadow: 0 0 8px rgba(227, 19, 172, 0.4);
+}
+/* هذا يضيف مسافة أسفل النص */
+.about-text {
+    margin-bottom: 25px; 
+}
+
+/* هذا يضيف مسافة أعلى القائمة المنسدلة */
+.custom-select {
+    margin-top: 25px;
+    display: block; /* يضمن نزولها في سطر مستقل */
+    width: 100%;    /* لجعلها متناسقة مع عرض الشاشة */
+}
